@@ -24,6 +24,9 @@ func (h *EncryptionHandler) TokenizeCard(c *fiber.Ctx) error {
 }
 
 func (h *EncryptionHandler) GetToken(c *fiber.Ctx) error {
-	id := c.Params("id")
+	id, err := c.ParamsInt("id") // Use c.ParamsInt
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid token ID")
+	}
 	return c.JSON(h.svc.GetToken(c.Context(), id))
 }
